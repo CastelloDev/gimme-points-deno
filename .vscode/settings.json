@@ -1,3 +1,10 @@
-{ 
+{
     "deno.enable": true,
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "eslint.lintTask.enable": true,
+    "eslint.run": "onSave",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
 }
