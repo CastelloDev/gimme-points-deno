@@ -7,4 +7,4 @@ then run
 
 # technologies
 DenoDB as ORM [Docs](https://eveningkid.com/denodb-docs/)
-
+Pogo as server management [Docs](https://deno.land/x/pogo@v0.5.2/docs)
