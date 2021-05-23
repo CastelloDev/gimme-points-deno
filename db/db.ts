@@ -1,53 +1,8 @@
 import { Database, PostgresConnector } from 'https://deno.land/x/denodb/mod.ts';
-import { Task } from './models/index.ts'
+import { Relationships } from 'https://deno.land/x/denodb/mod.ts';
+import { Task, User } from './models/index.ts'
 import { tasks } from './seedData/tasks.ts'
-
-export const initAndSeed = async () => {
-
-	const connection = new PostgresConnector({
-	host: 'localhost',
-	username: 'postgres',
-	password: 'password',
-	database: 'gimme_points_db',
-	port: 5433
-	});
-
-	const db = new Database(connection);
-
-	db.link([Task]);
-
-	await db.sync({ drop: true });
-	// await db.sync({ drop: false });
-
-	for await (const task of tasks) {
-		await Task.create(task);
-	}
-
-	// or
-
-	// const flight = new Task();
-	// flight.departure = 'London';
-	// flight.destination = 'San Francisco';
-	// await flight.save();
-
-	await Task.select('name').all();
-	// [ { destination: "Tokyo" }, { destination: "San Francisco" } ]
-
-	// await Task.where('destination', 'Tokyo').delete();
-
-	// const sfFlight = await Task.select('destination').find(2);
-	// { destination: "San Francisco" }
-
-	// await Task.count();
-	// 1
-
-	// await Task.select('id', 'destination').orderBy('id').get();
-	// [ { id: "2", destination: "San Francisco" } ]
-
-	// await sfFlight.delete();
-
-	await db.close();
-}
+import { users } from './seedData/users.ts'
 
 class DB {
 	public client: Database;
@@ -72,13 +27,21 @@ class DB {
 			port: this.port
 		});
 		const db = new Database(connection);
-		db.link([Task]);
+
+		Relationships.belongsTo(Task, User, { foreignKey: `createdById`});
+
+		db.link([ User, Task ]);
 
 		this.client = db;
 	}
 
 	async seed() {
 		await this.client.sync({ drop: true });
+
+		for await (const user of users) {
+			await User.create(user);
+		}
+
 		for await (const task of tasks) {
 			await Task.create(task);
 		}

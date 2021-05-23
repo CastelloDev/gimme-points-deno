@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  db:
+    container_name: gp_pg_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gimme_points_db
+    ports:
+      - "5433:5432"
+  pgadmin:
+    container_name: gp_pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: castello.dev@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "5050:80"
